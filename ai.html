@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Productivity Prompt</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+
+  <div class="bg-white shadow-lg rounded-xl p-6 w-full max-w-xl">
+    <h1 class="text-2xl font-bold text-center mb-6 text-blue-700">Smart Productivity Prompt</h1>
+
+    <form id="productivityForm" class="space-y-4">
+      <div>
+        <label class="block font-semibold">📝 Tasks for the day:</label>
+        <textarea id="tasks" class="w-full p-2 border rounded" required></textarea>
+      </div>
+
+      <div>
+        <label class="block font-semibold">⏳ Total time to work/study (in hours):</label>
+        <input type="number" id="time" class="w-full p-2 border rounded" required />
+      </div>
+
+      <div>
+        <label class="block font-semibold">⚙️ Preferred productivity technique:</label>
+        <select id="technique" class="w-full p-2 border rounded" required>
+          <option value="Pomodoro">Pomodoro</option>
+          <option value="Eisenhower Matrix">Eisenhower Matrix</option>
+          <option value="Time Blocking">Time Blocking</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block font-semibold">📋 Habits you’re tracking (optional):</label>
+        <input type="text" id="habits" class="w-full p-2 border rounded" />
+      </div>
+
+      <div>
+        <label class="block font-semibold">🎯 Tone preference:</label>
+        <label class="mr-4"><input type="radio" name="tone" value="Friendly" checked /> Friendly</label>
+        <label><input type="radio" name="tone" value="Strict" /> Strict</label>
+      </div>
+
+      <div>
+        <label class="block font-semibold">✨ Any special feature (optional):</label>
+        <input type="text" id="feature" class="w-full p-2 border rounded" />
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">📌 Generate Plan</button>
+    </form>
+
+    <div id="output" class="mt-6 p-4 bg-blue-50 border border-blue-300 rounded hidden"></div>
+
+    <button id="generateReply" class="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 hidden">🧠 Generate AI Reply</button>
+    
+    <div id="aiReply" class="mt-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 rounded-md shadow-sm text-gray-800 font-medium hidden"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("productivityForm");
+    const output = document.getElementById("output");
+    const aiReplyBtn = document.getElementById("generateReply");
+    const aiReply = document.getElementById("aiReply");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const tasks = document.getElementById("tasks").value;
+      const time = document.getElementById("time").value;
+      const technique = document.getElementById("technique").value;
+      const habits = document.getElementById("habits").value;
+      const tone = document.querySelector('input[name="tone"]:checked').value;
+      const feature = document.getElementById("feature").value;
+
+      const plan = `
+        <h2 class="text-lg font-bold mb-2">🧩 Plan using: <span class="text-blue-700">${technique}</span></h2>
+        <p><strong>📝 Tasks:</strong> ${tasks}</p>
+        <p><strong>⏱ Total Time:</strong> ${time} hours</p>
+        ${habits ? `<p><strong>📋 Habits Tracked:</strong> ${habits}</p>` : ""}
+        ${feature ? `<p><strong>✨ Special Feature:</strong> ${feature}</p>` : ""}
+        <p class="mt-3 italic text-green-700">"Productivity is never an accident. It is always the result of a commitment to excellence."</p>
+      `;
+
+      output.innerHTML = plan;
+      output.classList.remove("hidden");
+      aiReplyBtn.classList.remove("hidden");
+    });
+
+    aiReplyBtn.addEventListener("click", function () {
+      const tone = document.querySelector('input[name="tone"]:checked').value;
+      const technique = document.getElementById("technique").value;
+      const tasks = document.getElementById("tasks").value;
+      const time = document.getElementById("time").value;
+
+      let reply = "";
+
+      if (tone === "Friendly") {
+        reply += `👋 Hey rockstar! You're using the **${technique}** technique today.\n`;
+        reply += `Here's your mission:\n🔹 ${tasks}\n⏰ Estimated Time: ${time} hours.\nLet's crush it! 🚀`;
+      } else {
+        reply += `⚡ No distractions. Execute the **${technique}** plan now.\n`;
+        reply += `Tasks: ${tasks}\nTotal Time: ${time} hours\nFinish strong. 💪`;
+      }
+
+      aiReply.innerText = reply;
+      aiReply.classList.remove("hidden");
+    });
+  </script>
+
+</body>
+</html>
